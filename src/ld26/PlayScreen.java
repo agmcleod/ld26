@@ -101,6 +101,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	public void dispose() {
 		background.dispose();
 		sprites.dispose();
+		font.dispose();
 	}
 	
 	public void fireMissle() {
@@ -169,7 +170,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	
 	public void renderHealth() {
 		for(int i = 0; i < potatoHealth; i++) {
-			batch.draw(spud, 32 + (32 * i), Gdx.graphics.getHeight() - 32, 32, 32);
+			batch.draw(spud, 32 + (32 * i), Gdx.graphics.getHeight() - 42, 32, 32);
 		}
 	}
 	
