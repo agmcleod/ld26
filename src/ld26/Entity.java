@@ -13,6 +13,14 @@ public class Entity {
 		this.pos = new Vector2(x, y);
 	}
 	
+	public Vector2 getPos() {
+		return this.pos;
+	}
+	
+	public TextureRegion getTexture() {
+		return texture;
+	}
+	
 	public void render(SpriteBatch batch) {
 		batch.draw(texture, this.pos.x, this.pos.y);
 	}
