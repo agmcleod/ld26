@@ -1,5 +1,7 @@
 package ld26;
 
+import java.awt.geom.AffineTransform;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -63,10 +65,13 @@ public class Entity {
 	}
 	
 	public Vector2 rotateAroundPoint(Vector2 point) {
-		float x = point.x;
-		float a = (angle * MathUtils.PI / 180);
-		point.x = MathUtils.cos(a) * (point.x - rotatePos.x) - MathUtils.sin(a) * (point.y-rotatePos.y) + rotatePos.x;
-		point.y = MathUtils.sin(a) * (point.x-rotatePos.x) + MathUtils.cos(a) * (point.y-rotatePos.y) + rotatePos.y;
+		double[] pt = {point.x, point.y};
+		AffineTransform.getRotateInstance(Math.toRadians(angle), rotatePos.x, rotatePos.y)
+		  .transform(pt, 0, pt, 0, 1);
+		point.x = (float) pt[0];
+		point.y = (float) pt[1];
+		
+		
 		return point;
 	}
 	

@@ -221,7 +221,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		fireTimer += Gdx.graphics.getDeltaTime();
 		if(fireTimer > 1.5) {
 			fireTimer = 0;
-			fireMissle();
+			//fireMissle();
 		}
 		checkBulletCollision();
 	}
