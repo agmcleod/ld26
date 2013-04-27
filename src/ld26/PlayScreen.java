@@ -5,11 +5,14 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -26,6 +29,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	private Array<Missle> missles;
 	private TextureRegion missleRegion;
 	private TextureRegion potato;
+	private ShapeRenderer renderer;
 	private Texture sprites;
 	private Vector2 targetPos;
 	private TextureRegion tower;
@@ -33,6 +37,38 @@ public class PlayScreen implements Screen, InputProcessor {
 	
 	public PlayScreen(Game game) {
 		this.game = game;
+	}
+	
+	public void checkBulletCollision() {
+		Array<Bullet> bullets = barrel.getBullets();
+		if(bullets.size > 0 && missles.size > 0) {
+			Iterator<Bullet> ib = bullets.iterator();
+			while(ib.hasNext()) {
+				Bullet b = ib.next();
+				Iterator<Missle> im = missles.iterator();
+				while(im.hasNext()) {
+					Missle m = im.next();
+					if(b.getAABB().overlaps(m.getAABB())) {
+						im.remove();
+						ib.remove();
+					}
+				}
+			}
+		}
+	}
+	
+	public void debug() {
+		renderer.begin(ShapeType.Rectangle);
+		renderer.setColor(Color.WHITE);
+		Iterator<Missle> it = missles.iterator();
+		while(it.hasNext()) {
+			it.next().debug(renderer);
+		}
+		Iterator<Bullet> itb = barrel.getBullets().iterator();
+		while(itb.hasNext()) {
+			itb.next().debug(renderer);
+		}
+		renderer.end();
 	}
 
 	@Override
@@ -94,6 +130,8 @@ public class PlayScreen implements Screen, InputProcessor {
 		barrel.render(batch);
 		renderMissles(batch);
 		batch.end();
+		
+		debug();
 	}
 	
 	public void renderMissles(SpriteBatch batch) {
@@ -152,6 +190,8 @@ public class PlayScreen implements Screen, InputProcessor {
 		
 		missleRegion = new TextureRegion(sprites, 128, 32, 32, 32);
 		missles = new Array<Missle>();
+		
+		renderer = new ShapeRenderer();
 	}
 
 	@Override
@@ -183,6 +223,7 @@ public class PlayScreen implements Screen, InputProcessor {
 			fireTimer = 0;
 			fireMissle();
 		}
+		checkBulletCollision();
 	}
 	
 	public void updateMissles() {

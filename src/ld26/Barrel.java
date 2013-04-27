@@ -31,6 +31,10 @@ public class Barrel extends Entity {
 		bullets.add(Bullet.spawn(getPos(), angle, bulletRegion));
 	}
 	
+	public Array<Bullet> getBullets() {
+		return bullets;
+	}
+	
 	public Vector2 getRotationPos() {
 		return new Vector2(getPos().x + rotationPos.x, getPos().y + rotationPos.y);
 	}
