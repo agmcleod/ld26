@@ -5,12 +5,15 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class Game extends com.badlogic.gdx.Game {
 	
-	private StartScreen startScreen;
 	private PlayScreen playScreen;
+	private ReplayScreen replayScreen;
+	private StartScreen startScreen;
+	
 
 	@Override
 	public void create() {
 		playScreen = new PlayScreen(this);
+		replayScreen = new ReplayScreen(this);
 		startScreen = new StartScreen(this);
 		setScreen(startScreen);
 	}

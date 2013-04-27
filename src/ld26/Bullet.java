@@ -13,7 +13,7 @@ public class Bullet extends Entity {
 	public Bullet(TextureRegion texture, float x, float y, float angle) {
 		super(texture, x, y);
 		this.angle = angle;
-		movementSpeed = 300;
+		movementSpeed = 850;
 		setRotateOffset(0, 4);
 		setRotatePos(x, y + getRotateOffset().y);
 	}
