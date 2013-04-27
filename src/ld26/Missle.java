@@ -14,7 +14,7 @@ public class Missle extends Entity {
 	public Missle(TextureRegion texture, float x, float y) {
 		super(texture, x, y);
 		float middle = Gdx.graphics.getWidth() / 2;
-		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(100, Gdx.graphics.getHeight()));
+		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(100, Gdx.graphics.getHeight() - 100));
 		xMovement = 400 * ((Gdx.graphics.getWidth() - targetRoot.y) / Gdx.graphics.getHeight());
 		double ac = Math.pow((x - targetRoot.x), 2d);
 		a = (y - targetRoot.y) / ac;

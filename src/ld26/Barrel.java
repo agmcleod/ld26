@@ -55,7 +55,7 @@ public class Barrel extends Entity {
 		}
 	}
 	
-	public void update() {
+	public boolean update() {
 		Iterator<Bullet> it = bullets.iterator();
 		while(it.hasNext()) {
 			Bullet b = it.next();
@@ -63,5 +63,6 @@ public class Barrel extends Entity {
 				it.remove();
 			}
 		}
+		return false;
 	}
 }

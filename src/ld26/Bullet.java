@@ -8,13 +8,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends Entity {
 	
-	private float angle;
 	private int movementSpeed;
 	
 	public Bullet(TextureRegion texture, float x, float y, float angle) {
 		super(texture, x, y);
 		this.angle = angle;
-		movementSpeed = 800;
+		movementSpeed = 300;
+		setRotateOffset(0, 4);
+		setRotatePos(x, y + getRotateOffset().y);
 	}
 	
 	public static Bullet spawn(Vector2 position, float angle, TextureRegion texture) {
