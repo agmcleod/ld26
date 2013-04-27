@@ -29,6 +29,7 @@ public class StartScreen implements Screen, InputProcessor {
 		font.dispose();
 		titleFont.dispose();
 		screen.dispose();
+		batch.dispose();
 	}
 
 	@Override

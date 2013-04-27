@@ -78,6 +78,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		
 		if(potatoHealth <= 0) {
 			ReplayScreen r = game.getReplayScreen();
+			r.setLoss(true);
 			r.setScore(score);
 			game.setScreen(r);
 		}
@@ -102,6 +103,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		background.dispose();
 		sprites.dispose();
 		font.dispose();
+		batch.dispose();
 	}
 	
 	public void fireMissle() {
@@ -114,10 +116,12 @@ public class PlayScreen implements Screen, InputProcessor {
 	}
 	
 	public void incrementScore() {
-		score += 100;
+		score += 200;
 		if(score % 1000 == 0) {
-			Missle.rate += 100;
+			Missle.rate += 80;
 		}
+		
+		win();
 	}
 
 	@Override
@@ -283,6 +287,15 @@ public class PlayScreen implements Screen, InputProcessor {
 			if(m.update()) {
 				it.remove();
 			}
+		}
+	}
+	
+	public void win() {
+		if(score >= 10000) {
+			ReplayScreen r = game.getReplayScreen();
+			r.setLoss(false);
+			r.setScore(score);
+			game.setScreen(r);
 		}
 	}
 
