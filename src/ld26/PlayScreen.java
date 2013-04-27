@@ -104,7 +104,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	}
 	
 	public void setAngleViaMouseCoords() {
-		Vector2 bPos = barrel.getPos();
+		Vector2 bPos = barrel.getRotationPos();
 		float angle = MathUtils.atan2(targetPos.y - bPos.y, targetPos.x - bPos.x) * (180 / MathUtils.PI);
 		if(angle < 0) {
 			angle = 360 - (-angle);
