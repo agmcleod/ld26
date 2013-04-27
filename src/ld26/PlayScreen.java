@@ -5,13 +5,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PlayScreen implements Screen {
 	
 	private Texture background;
 	private SpriteBatch batch;
+	private Barrel barrel;
 	private Game game;
-	private Texture potato;
+	private TextureRegion potato;
+	private Texture sprites;
+	private TextureRegion tower;
+	
 	
 	public PlayScreen(Game game) {
 		this.game = game;
@@ -20,7 +25,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void dispose() {
 		background.dispose();
-		potato.dispose();
+		sprites.dispose();
 	}
 
 	@Override
@@ -41,6 +46,8 @@ public class PlayScreen implements Screen {
 		batch.begin();
 		batch.draw(background, 0, 0);
 		batch.draw(potato, 0, 0);
+		batch.draw(tower, 64, 0);
+		barrel.render(batch);
 		batch.end();
 	}
 
@@ -60,7 +67,10 @@ public class PlayScreen implements Screen {
 	public void show() {
 		background = new Texture(Gdx.files.internal("assets/background.png"));
 		batch = new SpriteBatch();
-		potato = new Texture(Gdx.files.internal("assets/potato.png"));
+		sprites = new Texture(Gdx.files.internal("assets/potato.png"));
+		potato = new TextureRegion(sprites, 0, 0, 64, 128);
+		tower = new TextureRegion(sprites, 64, 0, 64, 128);
+		barrel = new Barrel(new TextureRegion(sprites, 128, 0, 8, 41));
 	}
 
 }
