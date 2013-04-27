@@ -1,22 +1,34 @@
 package ld26;
 
+import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Barrel extends Entity {
 	
 	private float angle;
+	private TextureRegion bulletRegion;
+	private Array<Bullet> bullets;
 	private Vector2 rotationPos;
 	
-	public Barrel(TextureRegion texture) {
-		super(texture, 120, 110);
+	public Barrel(Texture texture, TextureRegion region) {
+		super(region, 120, 110);
 		angle = 0;
-		this.rotationPos = new Vector2(0, 4); 
+		rotationPos = new Vector2(0, 4);
+		bulletRegion = new TextureRegion(texture, 128, 8, 16, 8);
+		bullets = new Array<Bullet>();
 	}
 	
 	public float getAngle() {
 		return this.angle;
+	}
+	
+	public void fire(Vector2 targetPos) {
+		bullets.add(Bullet.spawn(getPos(), angle, bulletRegion));
 	}
 	
 	public Vector2 getRotationPos() {
@@ -26,11 +38,26 @@ public class Barrel extends Entity {
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.draw(getTexture(), getPos().x, getPos().y, rotationPos.x, rotationPos.y, 32, 8, 1, 1, this.angle, true);
+		Iterator<Bullet> it = bullets.iterator();
+		while(it.hasNext()) {
+			Bullet b = it.next();
+			b.render(batch);
+		}
 	}
 	
 	public void setAngle(float angle) {
 		if((angle > 0 && angle < 90) || (angle < 360 && angle > 270)) {
 			this.angle = angle;
+		}
+	}
+	
+	public void update() {
+		Iterator<Bullet> it = bullets.iterator();
+		while(it.hasNext()) {
+			Bullet b = it.next();
+			if(b.update()) {
+				it.remove();
+			}
 		}
 	}
 }

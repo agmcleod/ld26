@@ -119,7 +119,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		sprites = new Texture(Gdx.files.internal("assets/potato.png"));
 		potato = new TextureRegion(sprites, 0, 0, 64, 128);
 		tower = new TextureRegion(sprites, 64, 0, 64, 128);
-		barrel = new Barrel(new TextureRegion(sprites, 128, 0, 32, 8));
+		barrel = new Barrel(sprites, new TextureRegion(sprites, 128, 0, 32, 8));
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
@@ -134,7 +134,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
+		barrel.fire(this.targetPos);
 		return false;
 	}
 
@@ -154,6 +154,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		camera.update();
 		// update barrel angle
 		setAngleViaMouseCoords();
+		barrel.update();
 	}
 
 }

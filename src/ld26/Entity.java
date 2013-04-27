@@ -24,4 +24,8 @@ public class Entity {
 	public void render(SpriteBatch batch) {
 		batch.draw(texture, this.pos.x, this.pos.y);
 	}
+	
+	public void setPos(Vector2 pos) {
+		this.pos = pos;
+	}
 }
