@@ -1,5 +1,7 @@
 package ld26;
 
+import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public class PlayScreen implements Screen, InputProcessor {
 	
@@ -18,7 +21,10 @@ public class PlayScreen implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private Barrel barrel;
 	private OrthographicCamera camera;
+	private float fireTimer = 0;
 	private Game game;
+	private Array<Missle> missles;
+	private TextureRegion missleRegion;
 	private TextureRegion potato;
 	private Texture sprites;
 	private Vector2 targetPos;
@@ -33,6 +39,10 @@ public class PlayScreen implements Screen, InputProcessor {
 	public void dispose() {
 		background.dispose();
 		sprites.dispose();
+	}
+	
+	public void fireMissle() {
+		missles.add(new Missle(missleRegion, Gdx.graphics.getWidth(), 0));
 	}
 
 	@Override
@@ -82,7 +92,16 @@ public class PlayScreen implements Screen, InputProcessor {
 		batch.draw(potato, 0, 0);
 		batch.draw(tower, 64, 0);
 		barrel.render(batch);
+		renderMissles(batch);
 		batch.end();
+	}
+	
+	public void renderMissles(SpriteBatch batch) {
+		Iterator<Missle> it = missles.iterator();
+		while(it.hasNext()) {
+			Missle m = it.next();
+			m.render(batch);
+		}
 	}
 
 	@Override
@@ -130,6 +149,9 @@ public class PlayScreen implements Screen, InputProcessor {
 		targetPos = new Vector2(startPos.x, startPos.y);
 		
 		Gdx.input.setInputProcessor(this);
+		
+		missleRegion = new TextureRegion(sprites, 128, 32, 32, 32);
+		missles = new Array<Missle>();
 	}
 
 	@Override
@@ -155,6 +177,22 @@ public class PlayScreen implements Screen, InputProcessor {
 		// update barrel angle
 		setAngleViaMouseCoords();
 		barrel.update();
+		updateMissles();
+		fireTimer += Gdx.graphics.getDeltaTime();
+		if(fireTimer > 1.5) {
+			fireTimer = 0;
+			fireMissle();
+		}
+	}
+	
+	public void updateMissles() {
+		Iterator<Missle> it = missles.iterator();
+		while(it.hasNext()) {
+			Missle m = it.next();
+			if(m.update()) {
+				it.remove();
+			}
+		}
 	}
 
 }
