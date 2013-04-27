@@ -1,10 +1,17 @@
 package ld26;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PlayScreen implements Screen {
 	
-private Game game;
+	private Texture background;
+	private SpriteBatch batch;
+	private Game game;
+	private Texture potato;
 	
 	public PlayScreen(Game game) {
 		this.game = game;
@@ -12,8 +19,8 @@ private Game game;
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		background.dispose();
+		potato.dispose();
 	}
 
 	@Override
@@ -30,8 +37,11 @@ private Game game;
 
 	@Override
 	public void render(float arg0) {
-		// TODO Auto-generated method stub
-
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(background, 0, 0);
+		batch.draw(potato, 0, 0);
+		batch.end();
 	}
 
 	@Override
@@ -48,8 +58,9 @@ private Game game;
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		background = new Texture(Gdx.files.internal("assets/background.png"));
+		batch = new SpriteBatch();
+		potato = new Texture(Gdx.files.internal("assets/potato.png"));
 	}
 
 }
