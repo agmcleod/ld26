@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,6 +27,8 @@ public class PlayScreen implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private Barrel barrel;
 	private OrthographicCamera camera;
+	private Sound explosionSound;
+	private Sound fireSound;
 	private float fireTimer = 0;
 	private BitmapFont font;
 	private Game game;
@@ -59,6 +62,7 @@ public class PlayScreen implements Screen, InputProcessor {
 						incrementScore();
 						im.remove();
 						ib.remove();
+						explosionSound.play();
 					}
 				}
 			}
@@ -240,12 +244,18 @@ public class PlayScreen implements Screen, InputProcessor {
 		
 		missles = new Array<Missle>();
 		renderer = new ShapeRenderer();
+		
+		// sound
+		
+		explosionSound = Gdx.audio.newSound(Gdx.files.internal("assets/explosion.wav"));
+		fireSound = Gdx.audio.newSound(Gdx.files.internal("assets/fire.wav"));
 	}
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
 		if(fireTimer > Barrel.fireCooldown) {
 			barrel.fire(this.targetPos);
+			fireSound.play();
 			fireTimer = 0;
 		}
 		
