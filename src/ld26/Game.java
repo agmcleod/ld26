@@ -21,6 +21,10 @@ public class Game extends com.badlogic.gdx.Game {
 	public PlayScreen getPlayScreen() {
 		return playScreen;
 	}
+	
+	public ReplayScreen getReplayScreen() {
+		return replayScreen;
+	}
 
 	public StartScreen getStartScreen() {
 		return startScreen;

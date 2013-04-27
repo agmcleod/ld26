@@ -56,7 +56,7 @@ public class PlayScreen implements Screen, InputProcessor {
 				while(im.hasNext()) {
 					Missle m = im.next();
 					if(b.getAABB().overlaps(m.getAABB())) {
-						score += 100;
+						incrementScore();
 						im.remove();
 						ib.remove();
 					}
@@ -77,7 +77,9 @@ public class PlayScreen implements Screen, InputProcessor {
 		}
 		
 		if(potatoHealth <= 0) {
-			
+			ReplayScreen r = game.getReplayScreen();
+			r.setScore(score);
+			game.setScreen(r);
 		}
 	}
 	
@@ -107,8 +109,14 @@ public class PlayScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		
+	}
+	
+	public void incrementScore() {
+		score += 100;
+		if(score % 1000 == 0) {
+			Missle.rate += 100;
+		}
 	}
 
 	@Override
