@@ -51,6 +51,8 @@ public class PlayScreen implements Screen, InputProcessor {
 	private Vector2 targetPos;
 	private TextureRegion tower;
 	
+	private final int WINNING_SCORE = 10000;
+	
 	
 	public PlayScreen(Game game) {
 		this.game = game;
@@ -193,6 +195,9 @@ public class PlayScreen implements Screen, InputProcessor {
 		renderHealth();
 		String s = String.valueOf(score);
 		font.draw(batch, s, Gdx.graphics.getWidth() - 10 - (s.length() * 24), 32);
+		if(score >= WINNING_SCORE) {
+			font.draw(batch, "The enemy has run out of ammo!", 120, Gdx.graphics.getHeight() - 64);
+		}
 		batch.end();
 	}
 	
@@ -366,7 +371,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	}
 	
 	public void win() {
-		if(score >= 10000 && missles.size == 0) {
+		if(score >= WINNING_SCORE && missles.size == 0) {
 			ReplayScreen r = game.getReplayScreen();
 			r.setLoss(false);
 			r.setScore(score);
