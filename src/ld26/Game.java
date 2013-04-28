@@ -43,6 +43,7 @@ public class Game extends com.badlogic.gdx.Game {
 		cfg.useGL20 = true;
 		cfg.width = 800;
 		cfg.height = 640;
+		cfg.title = "LD 26 - Minimalism - Potato Defense";
 		new LwjglApplication(new Game(), cfg);
 	}
 }
