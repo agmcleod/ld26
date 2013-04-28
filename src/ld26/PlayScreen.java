@@ -125,6 +125,8 @@ public class PlayScreen implements Screen, InputProcessor {
 		chordLoop.dispose();
 		simpleLoop.dispose();
 		renderer.dispose();
+		explosionSound.dispose();
+		fireSound.dispose();
 	}
 	
 	public void fireMissle() {
