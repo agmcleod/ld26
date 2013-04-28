@@ -19,7 +19,7 @@ public class Missle extends Entity {
 		super(texture, x, y);
 		this.health = health;
 		float middle = Gdx.graphics.getWidth() / 2;
-		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(250, Gdx.graphics.getHeight() - 100));
+		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(190, Gdx.graphics.getHeight() - 100));
 		xMovement = Missle.rate * ((Gdx.graphics.getWidth() - targetRoot.y) / Gdx.graphics.getHeight());
 		double ac = Math.pow((x - targetRoot.x), 2d);
 		a = (y - targetRoot.y) / ac;

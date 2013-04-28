@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class StartScreen implements Screen, InputProcessor {
 	
@@ -15,8 +16,10 @@ public class StartScreen implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private Game game;
+	private TextureRegion[] missleTypes;
 	private Texture screen;
 	private int screenIndex;
+	private Texture sprites;
 	private BitmapFont titleFont;
 	
 	public StartScreen(Game game) {
@@ -30,6 +33,7 @@ public class StartScreen implements Screen, InputProcessor {
 		titleFont.dispose();
 		screen.dispose();
 		batch.dispose();
+		sprites.dispose();
 	}
 
 	@Override
@@ -86,6 +90,21 @@ public class StartScreen implements Screen, InputProcessor {
 			font.draw(batch, "With your mouse, use the turret provided", 80, Gdx.graphics.getHeight() - 235);
 			font.draw(batch, "and save our base!", 235, Gdx.graphics.getHeight() - 280);
 		}
+		else if(screenIndex == 2) {
+			font.draw(batch, "The enemy has three projectiles:", 50, Gdx.graphics.getHeight() - 80);
+			for(int i = 0; i < missleTypes.length; i++) {
+				int y = Gdx.graphics.getHeight() - 120 - (i * 50);
+				batch.draw(missleTypes[i], 50, y - 22);
+				String hit = "";
+				if(i == 0) {
+					hit = "1 hit";
+				}
+				else {
+					hit = (i + 1) + " hits";
+				}
+				font.draw(batch, "Takes " + hit + " to destroy", 92, y);
+			}
+		}
 		else {
 			game.setScreen(game.getPlayScreen());
 		}
@@ -120,6 +139,11 @@ public class StartScreen implements Screen, InputProcessor {
 		screen = new Texture(Gdx.files.internal("assets/screen.png"));
 		screenIndex = 0;
 		Gdx.input.setInputProcessor(this);
+		sprites = new Texture(Gdx.files.internal("assets/potato.png"));
+		missleTypes = new TextureRegion [3];
+		missleTypes[0] = new TextureRegion(sprites, 128, 32, 32, 32);
+		missleTypes[1] = new TextureRegion(sprites, 160, 0, 32, 32);
+		missleTypes[2] = new TextureRegion(sprites, 160, 32, 32, 32);
 	}
 
 	@Override

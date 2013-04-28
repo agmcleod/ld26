@@ -139,7 +139,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	public void incrementScore() {
 		score += 200;
 		if(score % 1000 == 0) {
-			missleCooldown -= 0.05f;
+			missleCooldown -= 0.07f;
 		}
 		
 		win();
