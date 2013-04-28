@@ -36,6 +36,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	private BitmapFont font;
 	private Game game;
 	private Array<Missle> missles;
+	private float missleCooldown = 1.5f;
 	private TextureRegion missleRegion;
 	private float missleTimer = 0;
 	private float musicTimer = 0;
@@ -69,9 +70,12 @@ public class PlayScreen implements Screen, InputProcessor {
 						Vector2 pos = m.getPos();
 						pos.x += 16;
 						pos.y += 16;
-						im.remove();
+						if(m.deincrementHealth()) {
+							im.remove();
+							explosionSound.play(0.5f);
+						}
 						ib.remove();
-						explosionSound.play(0.5f);
+						
 						spawnParticles(pos);
 					}
 				}
@@ -124,7 +128,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	}
 	
 	public void fireMissle() {
-		missles.add(new Missle(missleRegion, Gdx.graphics.getWidth(), 0));
+		missles.add(Missle.spawn(sprites));
 	}
 
 	@Override
@@ -135,7 +139,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	public void incrementScore() {
 		score += 200;
 		if(score % 1000 == 0) {
-			Missle.rate += 80;
+			missleCooldown -= 0.05f;
 		}
 		
 		win();
@@ -330,7 +334,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		fireTimer += Gdx.graphics.getDeltaTime();
 		missleTimer += Gdx.graphics.getDeltaTime();
 		musicTimer += Gdx.graphics.getDeltaTime();
-		if(missleTimer > 1.5) {
+		if(missleTimer > missleCooldown) {
 			missleTimer = 0;
 			fireMissle();
 		}

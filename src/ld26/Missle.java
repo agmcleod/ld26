@@ -12,12 +12,14 @@ public class Missle extends Entity {
 	private double a;
 	private Vector2 targetRoot;
 	private float xMovement;
-	static float rate = 400;
+	private int health;
+	static float rate = 300;
 	
-	public Missle(TextureRegion texture, float x, float y) {
+	public Missle(TextureRegion texture, float x, float y, int health) {
 		super(texture, x, y);
+		this.health = health;
 		float middle = Gdx.graphics.getWidth() / 2;
-		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(100, Gdx.graphics.getHeight() - 100));
+		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(250, Gdx.graphics.getHeight() - 100));
 		xMovement = Missle.rate * ((Gdx.graphics.getWidth() - targetRoot.y) / Gdx.graphics.getHeight());
 		double ac = Math.pow((x - targetRoot.x), 2d);
 		a = (y - targetRoot.y) / ac;
@@ -43,6 +45,23 @@ public class Missle extends Entity {
 			particles.add(new Particle(tr, position.x, position.y, target, deg));
 		}
 		return particles;
+	}
+	
+	public static Missle spawn(Texture texture) {
+		TextureRegion[] regions = {
+			new TextureRegion(texture, 128, 32, 32, 32),
+			new TextureRegion(texture, 160, 0, 32, 32),
+			new TextureRegion(texture, 160, 32, 32, 32)
+		};
+		int rand = MathUtils.random(0, 2);
+		TextureRegion missleRegion = regions[rand];
+		Missle missle = new Missle(missleRegion, Gdx.graphics.getWidth(), 0, rand + 1);
+		return missle;
+	}
+	
+	public boolean deincrementHealth() {
+		health--;
+		return health <= 0;
 	}
 	
 	public boolean update() {

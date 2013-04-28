@@ -13,7 +13,7 @@ public class Barrel extends Entity {
 	private float angle;
 	private TextureRegion bulletRegion;
 	private Array<Bullet> bullets;
-	public static float fireCooldown = 0.3f;
+	public static float fireCooldown = 0.2f;
 	private Vector2 rotationPos;
 	
 	public Barrel(Texture texture, TextureRegion region) {
