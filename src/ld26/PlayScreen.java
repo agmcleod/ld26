@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -27,6 +28,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	private SpriteBatch batch;
 	private Barrel barrel;
 	private OrthographicCamera camera;
+	private Music chordLoop;
 	private Sound explosionSound;
 	private Sound fireSound;
 	private float fireTimer = 0;
@@ -35,10 +37,13 @@ public class PlayScreen implements Screen, InputProcessor {
 	private Array<Missle> missles;
 	private TextureRegion missleRegion;
 	private float missleTimer = 0;
+	private float musicTimer = 0;
+	private boolean playingFirstTrack;
 	private TextureRegion potato;
 	private int potatoHealth;
 	private ShapeRenderer renderer;
 	private int score;
+	private Music simpleLoop;
 	private Texture sprites;
 	private TextureRegion spud;
 	private Vector2 targetPos;
@@ -62,7 +67,7 @@ public class PlayScreen implements Screen, InputProcessor {
 						incrementScore();
 						im.remove();
 						ib.remove();
-						explosionSound.play();
+						explosionSound.play(0.5f);
 					}
 				}
 			}
@@ -108,6 +113,8 @@ public class PlayScreen implements Screen, InputProcessor {
 		sprites.dispose();
 		font.dispose();
 		batch.dispose();
+		chordLoop.dispose();
+		simpleLoop.dispose();
 	}
 	
 	public void fireMissle() {
@@ -249,13 +256,31 @@ public class PlayScreen implements Screen, InputProcessor {
 		
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("assets/explosion.wav"));
 		fireSound = Gdx.audio.newSound(Gdx.files.internal("assets/fire.wav"));
+		
+		simpleLoop = Gdx.audio.newMusic(Gdx.files.internal("assets/simpleloop.mp3"));
+		simpleLoop.setVolume(0.2f);
+		simpleLoop.setLooping(true);
+		simpleLoop.play();
+		musicTimer = 0;
+		playingFirstTrack = true;
+	}
+	
+	public void switchTracks() {
+		if(musicTimer >= 60.0f && playingFirstTrack) {
+			chordLoop = Gdx.audio.newMusic(Gdx.files.internal("assets/chordloop.mp3"));
+			chordLoop.setVolume(0.2f);
+			simpleLoop.stop();
+			chordLoop.setLooping(true);
+			chordLoop.play();
+			playingFirstTrack = false;
+		}
 	}
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
 		if(fireTimer > Barrel.fireCooldown) {
 			barrel.fire(this.targetPos);
-			fireSound.play();
+			fireSound.play(0.5f);
 			fireTimer = 0;
 		}
 		
@@ -282,12 +307,14 @@ public class PlayScreen implements Screen, InputProcessor {
 		updateMissles();
 		fireTimer += Gdx.graphics.getDeltaTime();
 		missleTimer += Gdx.graphics.getDeltaTime();
+		musicTimer += Gdx.graphics.getDeltaTime();
 		if(missleTimer > 1.5) {
 			missleTimer = 0;
 			fireMissle();
 		}
 		checkBulletCollision();
 		checkMissleCollision();
+		switchTracks();
 	}
 	
 	public void updateMissles() {
