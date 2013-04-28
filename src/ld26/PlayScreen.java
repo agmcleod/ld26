@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class PlayScreen implements Screen, InputProcessor {
 	
+	private Array<Particle> activeParticles;
 	private Texture background;
 	private SpriteBatch batch;
 	private Barrel barrel;
@@ -65,9 +66,13 @@ public class PlayScreen implements Screen, InputProcessor {
 					Missle m = im.next();
 					if(b.getAABB().overlaps(m.getAABB())) {
 						incrementScore();
+						Vector2 pos = m.getPos();
+						pos.x += 16;
+						pos.y += 16;
 						im.remove();
 						ib.remove();
 						explosionSound.play(0.5f);
+						spawnParticles(pos);
 					}
 				}
 			}
@@ -115,6 +120,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		batch.dispose();
 		chordLoop.dispose();
 		simpleLoop.dispose();
+		renderer.dispose();
 	}
 	
 	public void fireMissle() {
@@ -177,6 +183,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		batch.draw(tower, 64, 0);
 		barrel.render(batch);
 		renderMissles(batch);
+		renderParticles(batch);
 		renderHealth();
 		String s = String.valueOf(score);
 		font.draw(batch, s, Gdx.graphics.getWidth() - 10 - (s.length() * 24), 32);
@@ -194,6 +201,14 @@ public class PlayScreen implements Screen, InputProcessor {
 		while(it.hasNext()) {
 			Missle m = it.next();
 			m.render(batch);
+		}
+	}
+	
+	public void renderParticles(SpriteBatch batch) {
+		Iterator<Particle> it = activeParticles.iterator();
+		while(it.hasNext()) {
+			Particle p = it.next();
+			p.render(batch);
 		}
 	}
 
@@ -252,6 +267,8 @@ public class PlayScreen implements Screen, InputProcessor {
 		missles = new Array<Missle>();
 		renderer = new ShapeRenderer();
 		
+		activeParticles = new Array<Particle>();
+		
 		// sound
 		
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("assets/explosion.wav"));
@@ -263,6 +280,10 @@ public class PlayScreen implements Screen, InputProcessor {
 		simpleLoop.play();
 		musicTimer = 0;
 		playingFirstTrack = true;
+	}
+	
+	public void spawnParticles(Vector2 position) {
+		activeParticles.addAll(Missle.deathAnimation(sprites, position));
 	}
 	
 	public void switchTracks() {
@@ -305,6 +326,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		setAngleViaMouseCoords();
 		barrel.update();
 		updateMissles();
+		updateParticles();
 		fireTimer += Gdx.graphics.getDeltaTime();
 		missleTimer += Gdx.graphics.getDeltaTime();
 		musicTimer += Gdx.graphics.getDeltaTime();
@@ -322,6 +344,16 @@ public class PlayScreen implements Screen, InputProcessor {
 		while(it.hasNext()) {
 			Missle m = it.next();
 			if(m.update()) {
+				it.remove();
+			}
+		}
+	}
+	
+	public void updateParticles() {
+		Iterator<Particle> it = activeParticles.iterator();
+		while(it.hasNext()) {
+			Particle p = it.next();
+			if(p.update()) {
 				it.remove();
 			}
 		}
