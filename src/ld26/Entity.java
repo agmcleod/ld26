@@ -108,4 +108,8 @@ public class Entity {
 	public void setRotateOffset(float x, float y) {
 		this.rotateOffset.set(x, y);
 	}
+	
+	public void setTexture(TextureRegion texture) {
+		this.texture = texture;
+	}
 }

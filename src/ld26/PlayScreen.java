@@ -66,13 +66,13 @@ public class PlayScreen implements Screen, InputProcessor {
 				while(im.hasNext()) {
 					Missle m = im.next();
 					if(b.getAABB().overlaps(m.getAABB())) {
-						incrementScore();
 						Vector2 pos = m.getPos();
 						pos.x += 16;
 						pos.y += 16;
 						if(m.deincrementHealth()) {
 							im.remove();
 							explosionSound.play(0.5f);
+							incrementScore();
 						}
 						ib.remove();
 						
@@ -139,7 +139,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	public void incrementScore() {
 		score += 200;
 		if(score % 1000 == 0) {
-			missleCooldown -= 0.07f;
+			missleCooldown -= 0.06f;
 		}
 		
 		win();
@@ -334,7 +334,7 @@ public class PlayScreen implements Screen, InputProcessor {
 		fireTimer += Gdx.graphics.getDeltaTime();
 		missleTimer += Gdx.graphics.getDeltaTime();
 		musicTimer += Gdx.graphics.getDeltaTime();
-		if(missleTimer > missleCooldown) {
+		if(score < 10000 && missleTimer > missleCooldown) {
 			missleTimer = 0;
 			fireMissle();
 		}
@@ -364,7 +364,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	}
 	
 	public void win() {
-		if(score >= 10000) {
+		if(score >= 10000 && missles.size == 0) {
 			ReplayScreen r = game.getReplayScreen();
 			r.setLoss(false);
 			r.setScore(score);

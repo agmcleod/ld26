@@ -11,12 +11,14 @@ public class Missle extends Entity {
 	
 	private double a;
 	private Vector2 targetRoot;
+	private TextureRegion[] textures;
 	private float xMovement;
 	private int health;
 	static float rate = 300;
 	
-	public Missle(TextureRegion texture, float x, float y, int health) {
-		super(texture, x, y);
+	public Missle(TextureRegion[] textures, float x, float y, int health) {
+		super(textures[health-1], x, y);
+		this.textures = textures;
 		this.health = health;
 		float middle = Gdx.graphics.getWidth() / 2;
 		targetRoot = new Vector2(MathUtils.random(middle - 15, middle + 15), MathUtils.random(190, Gdx.graphics.getHeight() - 100));
@@ -54,13 +56,14 @@ public class Missle extends Entity {
 			new TextureRegion(texture, 160, 32, 32, 32)
 		};
 		int rand = MathUtils.random(0, 2);
-		TextureRegion missleRegion = regions[rand];
-		Missle missle = new Missle(missleRegion, Gdx.graphics.getWidth(), 0, rand + 1);
+		Missle missle = new Missle(regions, Gdx.graphics.getWidth(), 0, rand + 1);
 		return missle;
 	}
 	
 	public boolean deincrementHealth() {
 		health--;
+		if(health >= 1)
+			setTexture(textures[health-1]);
 		return health <= 0;
 	}
 	
